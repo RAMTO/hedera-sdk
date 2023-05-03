@@ -18,12 +18,13 @@ console.clear();
 
 const bytecode = WHBAR.bytecode;
 
+//Grab your Hedera testnet account ID and private key from your .env file
+const myAccountId = AccountId.fromString(process.env.MY_ACCOUNT_ID);
+// const myPrivateKey = PrivateKey.fromString(process.env.MY_PRIVATE_KEY);
+const myPrivateKey = PrivateKey.fromStringECDSA(process.env.MY_PRIVATE_KEY);
+
 // Functions
 const getClient = () => {
-  //Grab your Hedera testnet account ID and private key from your .env file
-  const myAccountId = AccountId.fromString(process.env.MY_ACCOUNT_ID);
-  // const myPrivateKey = PrivateKey.fromString(process.env.MY_PRIVATE_KEY);
-  const myPrivateKey = PrivateKey.fromStringECDSA(process.env.MY_PRIVATE_KEY);
   // const stakeAccount = "0.0.7027";
   const stakeAccount = AccountId.fromString("0.0.4538944");
 
@@ -48,7 +49,7 @@ const deployContract = async (client) => {
     .setBytecode(bytecode)
     .setGas(3000000)
     // .setAdminKey(myPrivateKey)
-    .setStakedAccountId(stakeAccount) // SET THIS ONE...
+    .setStakedAccountId("0.0.4538944") // SET THIS ONE...
     // .setStakedNodeId(3) // OR THIS ONE - DON'T SET BOTH
     // .setDeclineStakingReward(noRewardFlag) // MISSING IN SDK V2.17 FOR ContractCreateFlow()
     // .setInitialBalance(initialBalance)
@@ -114,7 +115,7 @@ const resetAllowances = async (client, accountId) => {
   }
 };
 
-const getContractInfo = async (client) => {
+const getContractInfo = async (client, contractId) => {
   const accountInfo = await new ContractInfoQuery()
     .setContractId(contractId)
     .execute(client);
@@ -124,17 +125,10 @@ const getContractInfo = async (client) => {
   console.log(
     `-- declineStakingReward: ${accountInfo.stakingInfo.declineStakingReward}`
   );
-  // https://hashscan.io/testnet/contract/0.0.3934435
-  // -- stakedAccountId: null
-  // -- stakedNodeId: 3
-  // -- declineStakingReward: falsе
-  // https://hashscan.io/testnet/contract/0.0.3934439
-  // -- stakedAccountId: 0.0.7028
-  // -- stakedNodeId: null
-  // -- declineStakingReward: false
 };
 
 const depositHBAR = async (client, contractId) => {
+  console.log("⚙️ Depositing HBAR...");
   const wrappTrans = new ContractExecuteTransaction()
     //Set the ID of the contract
     .setContractId(contractId)
@@ -148,8 +142,23 @@ const depositHBAR = async (client, contractId) => {
   const contractWrapSign = await wrappTrans.sign(myPrivateKey);
   const contractWrapSubmit = await contractWrapSign.execute(client);
   const contractWrapRx = await contractWrapSubmit.getReceipt(client);
-  console.log("contractWrapRx.status", contractWrapRx.status);
+  console.log("✅ HBAR deposited!");
+  console.log("☝️ Transaction status: ", contractWrapRx.status);
 };
 
 // Init
 const client = getClient();
+
+// await deployContract(client);
+
+// await depositHBAR(client, "0.0.4539024");
+
+// await getContractInfo(client, "0.0.4539024");
+
+/* 
+Staking info for `0.0.4539024`
+- Staking info:
+-- stakedAccountId: 0.0.4538944
+-- stakedNodeId: null
+-- declineStakingReward: false
+*/
