@@ -45,24 +45,26 @@ const getClient = () => {
 };
 
 const deployContract = async (client) => {
+  console.log("⚙️ Deploying contract...");
   const contractDeployTx = await new ContractCreateFlow()
     .setBytecode(bytecode)
     .setGas(3000000)
     // .setAdminKey(myPrivateKey)
-    .setStakedAccountId("0.0.4538944") // SET THIS ONE...
+    // .setStakedAccountId("0.0.4538944") // SET THIS ONE...
     // .setStakedNodeId(3) // OR THIS ONE - DON'T SET BOTH
     // .setDeclineStakingReward(noRewardFlag) // MISSING IN SDK V2.17 FOR ContractCreateFlow()
     // .setInitialBalance(initialBalance)
     // .setConstructorParameters(constructorParameters)
     // .setContractMemo(memo)
-    // .setAutoRenewAccountId(autoRenewAccountId)
-    // .setAutoRenewPeriod(autoRenewPeriod)
+    .setAutoRenewAccountId(myAccountId)
+    .setAutoRenewPeriod(7000000)
     // .setMaxAutomaticTokenAssociations(amount)
     .execute(client);
 
   const contractDeployRx = await contractDeployTx.getReceipt(client);
   const contractId = contractDeployRx.contractId;
-  console.log("contractId", contractId.toString());
+  console.log("✅ Contract deployed!");
+  console.log("☝️ Contract Id: ", contractId.toString());
 };
 
 const updateContract = async (client) => {
@@ -149,7 +151,7 @@ const depositHBAR = async (client, contractId) => {
 // Init
 const client = getClient();
 
-// await deployContract(client);
+await deployContract(client);
 
 // await depositHBAR(client, "0.0.4539024");
 
