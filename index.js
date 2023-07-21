@@ -8,6 +8,13 @@ import {
   ContractFunctionParameters,
   ContractInfoQuery,
   AccountAllowanceApproveTransaction,
+  TokenType,
+  TokenSupplyType,
+  TokenCreateTransaction,
+  TokenMintTransaction,
+  Hbar,
+  AccountBalanceQuery,
+  TransferTransaction,
 } from "@hashgraph/sdk";
 import axios from "axios";
 import * as dotenv from "dotenv";
@@ -148,10 +155,147 @@ const depositHBAR = async (client, contractId) => {
   console.log("☝️ Transaction status: ", contractWrapRx.status);
 };
 
+const createNFT = async (client) => {
+  //Create the NFT
+  const nftCreate = await new TokenCreateTransaction()
+    .setTokenName("test NFT")
+    .setTokenSymbol("TNFT")
+    .setTokenType(TokenType.NonFungibleUnique)
+    .setDecimals(0)
+    .setInitialSupply(0)
+    .setTreasuryAccountId(myAccountId)
+    .setSupplyType(TokenSupplyType.Finite)
+    .setMaxSupply(250)
+    .setSupplyKey(myPrivateKey)
+    .freezeWith(client);
+
+  //Sign the transaction with the treasury key
+  const nftCreateTxSign = await nftCreate.sign(myPrivateKey);
+
+  //Submit the transaction to a Hedera network
+  const nftCreateSubmit = await nftCreateTxSign.execute(client);
+
+  //Get the transaction receipt
+  const nftCreateRx = await nftCreateSubmit.getReceipt(client);
+
+  //Get the token ID
+  const tokenId = nftCreateRx.tokenId;
+
+  //Log the token ID
+  console.log(`- Created NFT with Token ID: ${tokenId} \n`);
+};
+
+const mintNFT = async (client, tokenId) => {
+  // Max transaction fee as a constant
+  const maxTransactionFee = new Hbar(20);
+
+  //IPFS content identifiers for which we will create a NFT
+  const CID = [
+    Buffer.from(
+      "ipfs://bafyreiao6ajgsfji6qsgbqwdtjdu5gmul7tv2v3pd6kjgcw5o65b2ogst4/metadata.json"
+    ),
+    Buffer.from(
+      "ipfs://bafyreic463uarchq4mlufp7pvfkfut7zeqsqmn3b2x3jjxwcjqx6b5pk7q/metadata.json"
+    ),
+    Buffer.from(
+      "ipfs://bafyreihhja55q6h2rijscl3gra7a3ntiroyglz45z5wlyxdzs6kjh2dinu/metadata.json"
+    ),
+    Buffer.from(
+      "ipfs://bafyreidb23oehkttjbff3gdi4vz7mjijcxjyxadwg32pngod4huozcwphu/metadata.json"
+    ),
+    Buffer.from(
+      "ipfs://bafyreie7ftl6erd5etz5gscfwfiwjmht3b52cevdrf7hjwxx5ddns7zneu/metadata.json"
+    ),
+  ];
+
+  // MINT NEW BATCH OF NFTs
+  const mintTx = new TokenMintTransaction()
+    .setTokenId(tokenId)
+    .setMetadata(CID) //Batch minting - UP TO 10 NFTs in single tx
+    .setMaxTransactionFee(maxTransactionFee)
+    .freezeWith(client);
+
+  //Sign the transaction with the supply key
+  const mintTxSign = await mintTx.sign(myPrivateKey);
+
+  //Submit the transaction to a Hedera network
+  const mintTxSubmit = await mintTxSign.execute(client);
+
+  //Get the transaction receipt
+  const mintRx = await mintTxSubmit.getReceipt(client);
+
+  //Log the serial number
+  console.log(
+    `- Created NFT ${tokenId} with serial: ${mintRx.serials[0].low} \n`
+  );
+};
+
+const sendNFT = async (client, tokenId, serialNumber, receiverId) => {
+  // Check the balance before the transfer for the treasury account
+  var balanceCheckTx = await new AccountBalanceQuery()
+    .setAccountId(myAccountId)
+    .execute(client);
+  console.log(
+    `- Treasury balance: ${balanceCheckTx.tokens._map.get(
+      tokenId.toString()
+    )} NFTs of ID ${tokenId}`
+  );
+
+  // Check the balance before the transfer for Alice's account
+  var balanceCheckTx = await new AccountBalanceQuery()
+    .setAccountId(receiverId)
+    .execute(client);
+  console.log(
+    `- Alice's balance: ${balanceCheckTx.tokens._map.get(
+      tokenId.toString()
+    )} NFTs of ID ${tokenId}`
+  );
+
+  // Transfer the NFT from treasury to Alice
+  // Sign with the treasury key to authorize the transfer
+  const tokenTransferTx = await new TransferTransaction()
+    .addNftTransfer(tokenId, serialNumber, myAccountId, receiverId)
+    .freezeWith(client)
+    .sign(myPrivateKey);
+
+  const tokenTransferSubmit = await tokenTransferTx.execute(client);
+  const tokenTransferRx = await tokenTransferSubmit.getReceipt(client);
+
+  console.log(
+    `\n- NFT transfer from Treasury to Alice: ${tokenTransferRx.status} \n`
+  );
+
+  // Check the balance of the treasury account after the transfer
+  var balanceCheckTx = await new AccountBalanceQuery()
+    .setAccountId(myAccountId)
+    .execute(client);
+  console.log(
+    `- Treasury balance: ${balanceCheckTx.tokens._map.get(
+      tokenId.toString()
+    )} NFTs of ID ${tokenId}`
+  );
+
+  // Check the balance of Alice's account after the transfer
+  var balanceCheckTx = await new AccountBalanceQuery()
+    .setAccountId(receiverId)
+    .execute(client);
+  console.log(
+    `- Alice's balance: ${balanceCheckTx.tokens._map.get(
+      tokenId.toString()
+    )} NFTs of ID ${tokenId}`
+  );
+};
+
 // Init
 const client = getClient();
 
-await deployContract(client);
+// await deployContract(client);
+
+// await createNFT(client);
+
+// await mintNFT(client, "0.0.15439552");
+
+await sendNFT(client, "0.0.15439552", 2, "0.0.7027");
 
 // await depositHBAR(client, "0.0.4539024");
 
