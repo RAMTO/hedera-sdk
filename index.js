@@ -131,6 +131,7 @@ const getContractInfo = async (client, contractId) => {
   console.log(`- Staking info:`);
   console.log(`-- stakedAccountId: ${accountInfo.stakingInfo.stakedAccountId}`);
   console.log(`-- stakedNodeId: ${accountInfo.stakingInfo.stakedNodeId}`);
+  console.log(`-- pendingRewards: ${accountInfo.stakingInfo.pendingReward}`);
   console.log(
     `-- declineStakingReward: ${accountInfo.stakingInfo.declineStakingReward}`
   );
