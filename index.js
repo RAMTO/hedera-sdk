@@ -15,6 +15,7 @@ import {
   Hbar,
   AccountBalanceQuery,
   TransferTransaction,
+  AccountCreateTransaction,
 } from "@hashgraph/sdk";
 import axios from "axios";
 import * as dotenv from "dotenv";
@@ -44,8 +45,8 @@ const getClient = () => {
 
   // Create our connection to the Hedera network
   // The Hedera JS SDK makes this really easy!
-  const client = Client.forTestnet();
-  // const client = Client.forMainnet();
+  // const client = Client.forTestnet();
+  const client = Client.forMainnet();
   client.setOperator(myAccountId, myPrivateKey);
 
   return client;
@@ -287,6 +288,25 @@ const sendNFT = async (client, tokenId, serialNumber, receiverId) => {
   );
 };
 
+const createAccount = async (client) => {
+  const newAccountPrivateKey = PrivateKey.generateECDSA();
+  const newAccountPublicKey = newAccountPrivateKey.publicKey;
+
+  //Create a new account with 1,000 tinybar starting balance
+  const newAccount = await new AccountCreateTransaction()
+    .setKey(newAccountPublicKey)
+    .setInitialBalance(Hbar.fromTinybars(1000))
+    .execute(client);
+
+  // Get the new account ID
+  const getReceipt = await newAccount.getReceipt(client);
+  const newAccountId = getReceipt.accountId;
+
+  //Log the account ID
+  console.log("The new account ID is: " + newAccountId);
+  console.log("The new account PK is: " + newAccountPrivateKey);
+};
+
 // Init
 const client = getClient();
 
@@ -296,11 +316,13 @@ const client = getClient();
 
 // await mintNFT(client, "0.0.15439552");
 
-await sendNFT(client, "0.0.15439552", 2, "0.0.7027");
+// await sendNFT(client, "0.0.15439552", 2, "0.0.7027");
 
 // await depositHBAR(client, "0.0.4539024");
 
 // await getContractInfo(client, "0.0.4539024");
+
+await createAccount(client);
 
 /* 
 Staking info for `0.0.4539024`
