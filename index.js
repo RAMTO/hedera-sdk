@@ -16,6 +16,7 @@ import {
   AccountBalanceQuery,
   TransferTransaction,
   AccountCreateTransaction,
+  Mnemonic,
 } from "@hashgraph/sdk";
 import axios from "axios";
 import * as dotenv from "dotenv";
@@ -307,6 +308,54 @@ const createAccount = async (client) => {
   console.log("The new account PK is: " + newAccountPrivateKey);
 };
 
+const createMnemonic = async () => {
+  const mnemonic = await Mnemonic.generate();
+  console.log("mnemonic: ", mnemonic);
+};
+
+const recoverMnemonic = async (mnemonic) => {
+  const recoveredMnemonic = await Mnemonic.fromString(mnemonic.toString());
+  const privateKey = await recoveredMnemonic.toPrivateKey();
+
+  console.log("privateKey", privateKey.toString());
+  console.log("publicKey", privateKey.publicKey.toString());
+};
+
+const createKeyPair = async () => {
+  const privateKey = await PrivateKey.generateED25519Async();
+  const publicKey = privateKey.publicKey;
+
+  console.log("private key = " + privateKey);
+  console.log("public key = " + publicKey);
+};
+
+const words = [
+  "tiger",
+  "digital",
+  "tragic",
+  "immune",
+  "wisdom",
+  "powder",
+  "accident",
+  "gallery",
+  "certain",
+  "mixture",
+  "suit",
+  "shine",
+  "exclude",
+  "strategy",
+  "daring",
+  "relief",
+  "whisper",
+  "such",
+  "silly",
+  "enter",
+  "exchange",
+  "already",
+  "medal",
+  "brain",
+];
+
 // Init
 const client = getClient();
 
@@ -322,7 +371,13 @@ const client = getClient();
 
 // await getContractInfo(client, "0.0.4539024");
 
-await createAccount(client);
+// await createAccount(client);
+
+// await createMnemonic();
+
+await recoverMnemonic(words);
+
+// await createKeyPair();
 
 /* 
 Staking info for `0.0.4539024`
