@@ -198,14 +198,14 @@
     protobufjs "^7.0.0"
     yargs "^16.2.0"
 
-"@hashgraph/cryptography@1.4.7":
-  version "1.4.7"
-  resolved "https://registry.yarnpkg.com/@hashgraph/cryptography/-/cryptography-1.4.7.tgz#15d474c6a7e2ee0138aeabe1c81eb1d25c383dde"
-  integrity sha512-DrwZxIw3AM01JINaINTBmFEJVn9lzTHHf343zYXzpu+MrUJbZzuGyzd5bW6DmGGvFqTF/xDo0S/XiO2StdhVgg==
+"@hashgraph/cryptography@1.4.8-beta.4":
+  version "1.4.8-beta.4"
+  resolved "https://registry.yarnpkg.com/@hashgraph/cryptography/-/cryptography-1.4.8-beta.4.tgz#23efea4d991f3955bcd98f87c14985456070beb5"
+  integrity sha512-43wpRuE6ML04dFNpNPHvEZTKlVT9+dOE7SxyQPMYunsFitJvlIDl1VvOXeOSGbVdsV+nDQQV7C9pZWRSV1e32g==
   dependencies:
     asn1js "^3.0.5"
     bignumber.js "^9.1.1"
-    bn.js "^5.1.1"
+    bn.js "^5.2.1"
     buffer "^6.0.3"
     crypto-js "^4.1.1"
     elliptic "^6.5.4"
@@ -215,26 +215,26 @@
     tweetnacl "^1.0.3"
     utf8 "^3.0.0"
 
-"@hashgraph/proto@2.13.0":
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/@hashgraph/proto/-/proto-2.13.0.tgz#084b859a8fc657808489c9d477e4258456dbd2f0"
-  integrity sha512-Wan4TyiGExymUQOD+WVE/Q/RDjr+eBv5JBVO5+RGa2FDyASFhUWA/E1G0ZyiynXf2clqlewXIHyuNxpR42S80A==
+"@hashgraph/proto@2.14.0-beta.2":
+  version "2.14.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@hashgraph/proto/-/proto-2.14.0-beta.2.tgz#348fc4c44ac0bb32ac69dd0bb7d9ef50bf46e759"
+  integrity sha512-LuypRVyDc05podG/FoDlElgirAiBa8LuyKoAdOmZHUQOC3zNA7bFneTkZJR92Oxhnc56++QCLCOsRPjVLOYBcw==
   dependencies:
     long "^4.0.0"
-    protobufjs "^7.1.2"
+    protobufjs "^7.2.5"
 
-"@hashgraph/sdk@^2.30.0":
-  version "2.30.0"
-  resolved "https://registry.yarnpkg.com/@hashgraph/sdk/-/sdk-2.30.0.tgz#e37fef5be7ccf901b8548f86abb38073c5da034c"
-  integrity sha512-wezW8W5JGA6dtaVGfHPgjYQp//QlKF3PtfkPUPQ22iVlgxzkXXkDEG+bKO9C+OCAvhGsC2sT0NR+xYhDYk5QGQ==
+"@hashgraph/sdk@^2.38.0":
+  version "2.38.0"
+  resolved "https://registry.yarnpkg.com/@hashgraph/sdk/-/sdk-2.38.0.tgz#3ca5dce6096a3c3248feb4acbf8c79318c041a04"
+  integrity sha512-fe28I/xEAyaA1S8VrwR4oWGLonyjadD0sHyCbaO+9zPgpQXcM4wMeBZrbkia5riemY+adPHwrJ5FxASk3Rr3eg==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/bignumber" "^5.7.0"
     "@ethersproject/bytes" "^5.7.0"
     "@ethersproject/rlp" "^5.7.0"
     "@grpc/grpc-js" "1.8.2"
-    "@hashgraph/cryptography" "1.4.7"
-    "@hashgraph/proto" "2.13.0"
+    "@hashgraph/cryptography" "1.4.8-beta.4"
+    "@hashgraph/proto" "2.14.0-beta.2"
     axios "^1.3.1"
     bignumber.js "^9.1.1"
     bn.js "^5.1.1"
@@ -243,7 +243,7 @@
     long "^4.0.0"
     pino "^8.14.1"
     pino-pretty "^10.0.0"
-    protobufjs "^7.1.2"
+    protobufjs "^7.2.5"
     utf8 "^3.0.0"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
@@ -356,10 +356,10 @@ axios@^1.3.1:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
-axios@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.4.0.tgz#38a7bf1224cd308de271146038b551d725f0be1f"
-  integrity sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==
+axios@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.2.tgz#de67d42c755b571d3e698df1b6504cde9b0ee9f2"
+  integrity sha512-7i24Ri4pmDRfJTR7LDBhsOTtcm+9kjX5WiY1X3wIisx6G9So3pfMkEiU7emUBe46oceVImccTEM3k6C5dbVW8A==
   dependencies:
     follow-redirects "^1.15.0"
     form-data "^4.0.0"
@@ -458,10 +458,10 @@ delayed-stream@~1.0.0:
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==
 
-dotenv@^16.0.3:
-  version "16.0.3"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.0.3.tgz#115aec42bac5053db3c456db30cc243a5a836a07"
-  integrity sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==
+dotenv@^16.3.1:
+  version "16.3.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.1.tgz#369034de7d7e5b120972693352a3bf112172cc3e"
+  integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
 
 elliptic@6.5.4, elliptic@^6.5.4:
   version "6.5.4"
@@ -742,10 +742,28 @@ process@^0.11.10:
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
   integrity sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==
 
-protobufjs@^7.0.0, protobufjs@^7.1.2:
+protobufjs@^7.0.0:
   version "7.2.2"
   resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-7.2.2.tgz#2af401d8c547b9476fb37ffc65782cf302342ca3"
   integrity sha512-++PrQIjrom+bFDPpfmqXfAGSQs40116JRrqqyf53dymUMvvb5d/LMRyicRoF1AUKoXVS1/IgJXlEgcpr4gTF3Q==
+  dependencies:
+    "@protobufjs/aspromise" "^1.1.2"
+    "@protobufjs/base64" "^1.1.2"
+    "@protobufjs/codegen" "^2.0.4"
+    "@protobufjs/eventemitter" "^1.1.0"
+    "@protobufjs/fetch" "^1.1.0"
+    "@protobufjs/float" "^1.0.2"
+    "@protobufjs/inquire" "^1.1.0"
+    "@protobufjs/path" "^1.1.2"
+    "@protobufjs/pool" "^1.1.0"
+    "@protobufjs/utf8" "^1.1.0"
+    "@types/node" ">=13.7.0"
+    long "^5.0.0"
+
+protobufjs@^7.2.5:
+  version "7.2.5"
+  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-7.2.5.tgz#45d5c57387a6d29a17aab6846dcc283f9b8e7f2d"
+  integrity sha512-gGXRSXvxQ7UiPgfw8gevrfRWcTlSbOFg+p/N+JVJEK5VhueL2miT6qTymqAmjr1Q5WbOCyJbyrk6JfWKwlFn6A==
   dependencies:
     "@protobufjs/aspromise" "^1.1.2"
     "@protobufjs/base64" "^1.1.2"
