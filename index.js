@@ -47,7 +47,7 @@ const getClient = () => {
   // Create our connection to the Hedera network
   // The Hedera JS SDK makes this really easy!
   // const client = Client.forTestnet();
-  const client = Client.forMainnet();
+  const client = Client.forTestnet();
   client.setOperator(myAccountId, myPrivateKey);
 
   return client;
@@ -308,6 +308,25 @@ const createAccount = async (client) => {
   console.log("The new account PK is: " + newAccountPrivateKey);
 };
 
+const createAccountWithKeys = async (client, pkString) => {
+  const newAccountPrivateKey = PrivateKey.fromStringED25519(pkString);
+  const newAccountPublicKey = newAccountPrivateKey.publicKey;
+
+  //Create a new account with 1,000 tinybar starting balance
+  const newAccount = await new AccountCreateTransaction()
+    .setKey(newAccountPublicKey)
+    .setInitialBalance(Hbar.fromTinybars(1000))
+    .execute(client);
+
+  // Get the new account ID
+  const getReceipt = await newAccount.getReceipt(client);
+  const newAccountId = getReceipt.accountId;
+
+  //Log the account ID
+  console.log("The new account ID is: " + newAccountId);
+  console.log("The new account PK is: " + newAccountPrivateKey);
+};
+
 const createMnemonic = async () => {
   const mnemonic = await Mnemonic.generate();
   console.log("mnemonic: ", mnemonic);
@@ -315,45 +334,38 @@ const createMnemonic = async () => {
 
 const recoverMnemonic = async (mnemonic) => {
   const recoveredMnemonic = await Mnemonic.fromString(mnemonic.toString());
-  const privateKey = await recoveredMnemonic.toPrivateKey();
+  const privateKey = await recoveredMnemonic.toStandardEd25519PrivateKey("", 0);
 
   console.log("privateKey", privateKey.toString());
   console.log("publicKey", privateKey.publicKey.toString());
-};
-
-const createKeyPair = async () => {
-  const privateKey = await PrivateKey.generateED25519Async();
-  const publicKey = privateKey.publicKey;
-
-  console.log("private key = " + privateKey);
-  console.log("public key = " + publicKey);
+  console.log("publicKey", privateKey.publicKey.toAccountId(0, 0));
 };
 
 const words = [
-  "tiger",
-  "digital",
-  "tragic",
-  "immune",
-  "wisdom",
-  "powder",
-  "accident",
-  "gallery",
-  "certain",
-  "mixture",
-  "suit",
-  "shine",
-  "exclude",
-  "strategy",
-  "daring",
-  "relief",
-  "whisper",
-  "such",
-  "silly",
-  "enter",
-  "exchange",
-  "already",
-  "medal",
-  "brain",
+  "clump",
+  "iron",
+  "fabric",
+  "dilemma",
+  "decide",
+  "rough",
+  "umbrella",
+  "dumb",
+  "chuckle",
+  "ostrich",
+  "task",
+  "scrub",
+  "invite",
+  "worry",
+  "wide",
+  "program",
+  "desk",
+  "sight",
+  "orchard",
+  "stuff",
+  "siren",
+  "stone",
+  "angle",
+  "genius",
 ];
 
 // Init
@@ -376,6 +388,11 @@ const client = getClient();
 // await createMnemonic();
 
 await recoverMnemonic(words);
+
+// await createAccountWithKeys(
+//   client,
+//   "302e020100300506032b657004220420752d5837c8fd33dba52e6bc055d8cb0c92d67e52541cfb5bd86d9f486a8f813f"
+// );
 
 // await createKeyPair();
 
