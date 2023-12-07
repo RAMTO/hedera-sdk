@@ -348,6 +348,7 @@ const recoverMnemonic = async (mnemonic) => {
 const createFileTransaction = async (client, content) => {
   //Create the transaction
   const transaction = await new FileCreateTransaction()
+    .setKeys([myPrivateKey.publicKey])
     .setContents(content)
     .setMaxTransactionFee(new Hbar(2))
     .freezeWith(client);
@@ -463,13 +464,13 @@ const client = getClient();
 //   "2d12724d4c607ed2a325ffcd4eed168deaec6be63599f312640c81a54f2f5387"
 // );
 
-await createFileTransaction(client, "Test 123");
+// await createFileTransaction(client, "Test 123");
 
-// await updateFileTransaction(client, "0.0.6727166", "Test123");
+// await updateFileTransaction(client, "0.0.6728676", "123Test");
 
-// await getFileInfoQuery(client, "0.0.121");
+// await getFileInfoQuery(client, "0.0.6728581");
 
-// await getFileContentTransaction(client, "0.0.6726834");
+await getFileContentTransaction(client, "0.0.6728676");
 
 // await createKeyPair();
 
