@@ -50,8 +50,8 @@ const getClient = () => {
 
   // Create our connection to the Hedera network
   // The Hedera JS SDK makes this really easy!
-  const client = Client.forMainnet();
-  // const client = Client.forTestnet();
+  // const client = Client.forMainnet();
+  const client = Client.forTestnet();
   client.setOperator(myAccountId, myPrivateKey);
 
   return client;
@@ -346,24 +346,14 @@ const recoverMnemonic = async (mnemonic) => {
 };
 
 const createFileTransaction = async (client, content) => {
-  const mnemonic = await Mnemonic.generate();
-  const pk1 = await mnemonic.toStandardEd25519PrivateKey("", 0);
-  const pk2 = await mnemonic.toStandardEd25519PrivateKey("", 1);
-
-  console.log("pk1", pk1.toString());
-  console.log("pb1", pk1.publicKey.toString());
-  console.log("pk2", pk2.toString());
-  console.log("pb2", pk2.publicKey.toString());
-
   //Create the transaction
   const transaction = await new FileCreateTransaction()
     .setContents(content)
-    .setKeys([pk1.publicKey, pk2.publicKey])
     .setMaxTransactionFee(new Hbar(2))
     .freezeWith(client);
 
   //Sign with the file private key
-  const signTx = await (await transaction.sign(pk1)).sign(pk2);
+  const signTx = await transaction.sign(myPrivateKey);
 
   //Sign with the client operator private key and submit to a Hedera network
   const submitTx = await signTx.execute(client);
@@ -473,7 +463,7 @@ const client = getClient();
 //   "2d12724d4c607ed2a325ffcd4eed168deaec6be63599f312640c81a54f2f5387"
 // );
 
-// await createFileTransaction(client, "test");
+await createFileTransaction(client, "Test 123");
 
 // await updateFileTransaction(client, "0.0.6727166", "Test123");
 
