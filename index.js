@@ -17,6 +17,10 @@ import {
   TransferTransaction,
   AccountCreateTransaction,
   Mnemonic,
+  FileCreateTransaction,
+  FileUpdateTransaction,
+  FileContentsQuery,
+  FileInfoQuery,
 } from "@hashgraph/sdk";
 import axios from "axios";
 import * as dotenv from "dotenv";
@@ -46,8 +50,8 @@ const getClient = () => {
 
   // Create our connection to the Hedera network
   // The Hedera JS SDK makes this really easy!
+  const client = Client.forMainnet();
   // const client = Client.forTestnet();
-  const client = Client.forTestnet();
   client.setOperator(myAccountId, myPrivateKey);
 
   return client;
@@ -341,6 +345,81 @@ const recoverMnemonic = async (mnemonic) => {
   console.log("publicKey", privateKey.publicKey.toAccountId(0, 0));
 };
 
+const createFileTransaction = async (client, content) => {
+  const mnemonic = await Mnemonic.generate();
+  const pk1 = await mnemonic.toStandardEd25519PrivateKey("", 0);
+  const pk2 = await mnemonic.toStandardEd25519PrivateKey("", 1);
+
+  console.log("pk1", pk1.toString());
+  console.log("pb1", pk1.publicKey.toString());
+  console.log("pk2", pk2.toString());
+  console.log("pb2", pk2.publicKey.toString());
+
+  //Create the transaction
+  const transaction = await new FileCreateTransaction()
+    .setContents(content)
+    .setKeys([pk1.publicKey, pk2.publicKey])
+    .setMaxTransactionFee(new Hbar(2))
+    .freezeWith(client);
+
+  //Sign with the file private key
+  const signTx = await (await transaction.sign(pk1)).sign(pk2);
+
+  //Sign with the client operator private key and submit to a Hedera network
+  const submitTx = await signTx.execute(client);
+
+  //Request the receipt
+  const receipt = await submitTx.getReceipt(client);
+
+  //Get the file ID
+  const newFileId = receipt.fileId;
+
+  console.log("The new file ID is: " + newFileId);
+};
+
+const updateFileTransaction = async (client, fileId, content) => {
+  //Update the transaction
+  const transaction = await new FileUpdateTransaction()
+    .setFileId(fileId)
+    .setContents(content)
+    .setMaxTransactionFee(new Hbar(2))
+    .freezeWith(client);
+
+  //Sign with the file private key
+  const signTx = await transaction.sign(myPrivateKey);
+
+  //Sign with the client operator private key and submit to a Hedera network
+  const submitTx = await signTx.execute(client);
+
+  //Request the receipt
+  const receipt = await submitTx.getReceipt(client);
+
+  //Get the transaction consensus status
+  const transactionStatus = receipt.status;
+
+  console.log(
+    "The transaction consensus status " + transactionStatus.toString()
+  );
+};
+
+const getFileContentTransaction = async (client, fileId) => {
+  const transaction = new FileContentsQuery().setFileId(fileId);
+
+  //Sign with client operator private key and submit the query to a Hedera network
+  const contents = await transaction.execute(client);
+
+  console.log(contents.toString());
+};
+
+const getFileInfoQuery = async (client, fileId) => {
+  const transaction = new FileInfoQuery().setFileId(fileId);
+
+  //Sign the query with the client operator private key and submit to a Hedera network
+  const getInfo = await transaction.execute(client);
+
+  console.log("File info response: " + getInfo.keys);
+};
+
 const words = [
   "clump",
   "iron",
@@ -387,12 +466,20 @@ const client = getClient();
 
 // await createMnemonic();
 
-await recoverMnemonic(words);
+// await recoverMnemonic(words);
 
 // await createAccountWithKeys(
 //   client,
-//   "302e020100300506032b657004220420752d5837c8fd33dba52e6bc055d8cb0c92d67e52541cfb5bd86d9f486a8f813f"
+//   "2d12724d4c607ed2a325ffcd4eed168deaec6be63599f312640c81a54f2f5387"
 // );
+
+// await createFileTransaction(client, "test");
+
+// await updateFileTransaction(client, "0.0.6727166", "Test123");
+
+// await getFileInfoQuery(client, "0.0.121");
+
+// await getFileContentTransaction(client, "0.0.6726834");
 
 // await createKeyPair();
 
