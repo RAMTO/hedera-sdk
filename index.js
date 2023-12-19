@@ -50,8 +50,9 @@ const getClient = () => {
 
   // Create our connection to the Hedera network
   // The Hedera JS SDK makes this really easy!
-  // const client = Client.forMainnet();
   const client = Client.forTestnet();
+  // const client = Client.forPreviewnet();
+  // const client = Client.forMainnet();
   client.setOperator(myAccountId, myPrivateKey);
 
   return client;
@@ -412,30 +413,30 @@ const getFileInfoQuery = async (client, fileId) => {
 };
 
 const words = [
-  "clump",
-  "iron",
-  "fabric",
-  "dilemma",
-  "decide",
-  "rough",
-  "umbrella",
-  "dumb",
-  "chuckle",
-  "ostrich",
-  "task",
-  "scrub",
-  "invite",
-  "worry",
-  "wide",
-  "program",
-  "desk",
-  "sight",
-  "orchard",
-  "stuff",
-  "siren",
-  "stone",
-  "angle",
-  "genius",
+  "omit",
+  "review",
+  "special",
+  "brass",
+  "miss",
+  "honey",
+  "person",
+  "train",
+  "venue",
+  "scissors",
+  "garage",
+  "forget",
+  "crack",
+  "jeans",
+  "nothing",
+  "great",
+  "photo",
+  "dance",
+  "nominee",
+  "dash",
+  "avoid",
+  "simple",
+  "family",
+  "trick",
 ];
 
 // Init
@@ -459,10 +460,12 @@ const client = getClient();
 
 // await recoverMnemonic(words);
 
-// await createAccountWithKeys(
-//   client,
-//   "2d12724d4c607ed2a325ffcd4eed168deaec6be63599f312640c81a54f2f5387"
-// );
+await createAccountWithKeys(
+  client,
+  "302e020100300506032b6570042204207657e9c21813b249baebde8c66a9d49801a7b29a5f564bf6aa993b2746fc1346"
+);
+
+// await createAccount(client);
 
 // await createFileTransaction(client, "Test 123");
 
@@ -470,7 +473,7 @@ const client = getClient();
 
 // await getFileInfoQuery(client, "0.0.6728581");
 
-await getFileContentTransaction(client, "0.0.6728676");
+// await getFileContentTransaction(client, "0.0.6728676");
 
 // await createKeyPair();
 
