@@ -35,6 +35,7 @@ const bytecode = WHBAR.bytecode;
 const myAccountId = AccountId.fromString(process.env.MY_ACCOUNT_ID);
 // const myPrivateKey = PrivateKey.fromString(process.env.MY_PRIVATE_KEY);
 const myPrivateKey = PrivateKey.fromStringECDSA(process.env.MY_PRIVATE_KEY);
+// const myPrivateKey = PrivateKey.fromStringED25519(process.env.MY_PRIVATE_KEY);
 
 // Functions
 const getClient = () => {
@@ -50,8 +51,8 @@ const getClient = () => {
 
   // Create our connection to the Hedera network
   // The Hedera JS SDK makes this really easy!
-  const client = Client.forTestnet();
-  // const client = Client.forPreviewnet();
+  // const client = Client.forTestnet();
+  const client = Client.forPreviewnet();
   // const client = Client.forMainnet();
   client.setOperator(myAccountId, myPrivateKey);
 
@@ -79,6 +80,19 @@ const deployContract = async (client) => {
   const contractId = contractDeployRx.contractId;
   console.log("✅ Contract deployed!");
   console.log("☝️ Contract Id: ", contractId.toString());
+};
+
+const transferHBAR = async (client, amount, receiverId) => {
+  const transaction = new TransferTransaction()
+    .addHbarTransfer(myAccountId, new Hbar(-amount))
+    .addHbarTransfer(receiverId, new Hbar(amount))
+    .freezeWith(client);
+
+  const contractUpdateSign = await transaction.sign(myPrivateKey);
+  const contractUpdateSubmit = await contractUpdateSign.execute(client);
+  const contractUpdateRx = await contractUpdateSubmit.getReceipt(client);
+
+  console.log("contractUpdateRx.status", contractUpdateRx.status);
 };
 
 const updateContract = async (client) => {
@@ -460,10 +474,10 @@ const client = getClient();
 
 // await recoverMnemonic(words);
 
-await createAccountWithKeys(
-  client,
-  "302e020100300506032b6570042204207657e9c21813b249baebde8c66a9d49801a7b29a5f564bf6aa993b2746fc1346"
-);
+// await createAccountWithKeys(
+//   client,
+//   "302e020100300506032b6570042204207657e9c21813b249baebde8c66a9d49801a7b29a5f564bf6aa993b2746fc1346"
+// );
 
 // await createAccount(client);
 
@@ -476,6 +490,8 @@ await createAccountWithKeys(
 // await getFileContentTransaction(client, "0.0.6728676");
 
 // await createKeyPair();
+
+await transferHBAR(client, 10, "0.0.194955");
 
 /* 
 Staking info for `0.0.4539024`
