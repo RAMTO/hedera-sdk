@@ -426,10 +426,25 @@ const getFileInfoQuery = async (client, fileId) => {
 
   //Sign the query with the client operator private key and submit to a Hedera network
   const getInfo = await transaction.execute(client);
-  const decodedKeys = flattenKeyList(getInfo.keys);
+  console.log("getInfo", getInfo);
+  const keylist = getInfo.keys.toArray().map((k) => normalizePublicKey(k));
 
-  console.log("File keys: " + decodedKeys);
+  console.log(keylist);
+  // const decodedKeys = flattenKeyList(getInfo.keys);
+
+  console.log("File keys: " + keylist);
 };
+
+function normalizePublicKey(key) {
+  const protoBuffKey = key._toProtobufKey();
+
+  if (protoBuffKey.ed25519) {
+    return PublicKey.fromBytesED25519(protoBuffKey.ed25519).toStringRaw();
+  } else if (protoBuffKey.ECDSASecp256k1) {
+    return PublicKey.fromBytesECDSA(protoBuffKey.ECDSASecp256k1).toStringRaw();
+  }
+  return "";
+}
 
 const flattenKeyList = (keyList) => {
   const protobufKey = keyList._toProtobufKey();
