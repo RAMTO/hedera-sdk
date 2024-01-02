@@ -455,47 +455,28 @@ const words = [
 // Init
 const client = getClient();
 
+/* Contracts */
 // await deployContract(client);
-
-// await createNFT(client);
-
-// await mintNFT(client, "0.0.15439552");
-
-// await sendNFT(client, "0.0.15439552", 2, "0.0.7027");
-
-// await depositHBAR(client, "0.0.4539024");
-
 // await getContractInfo(client, "0.0.4539024");
 
-// await createAccount(client);
+/* NFTs */
+// await createNFT(client);
+// await mintNFT(client, "0.0.15439552");
+// await sendNFT(client, "0.0.15439552", 2, "0.0.7027");
 
+/* Accounts */
 // await createMnemonic();
-
+// await createKeyPair();
 // await recoverMnemonic(words);
-
+// await createAccount(client);
 // await createAccountWithKeys(
 //   client,
 //   "302e020100300506032b6570042204207657e9c21813b249baebde8c66a9d49801a7b29a5f564bf6aa993b2746fc1346"
 // );
-
-// await createAccount(client);
-
-await createFileTransaction(client, "Test 123");
-
-// await updateFileTransaction(client, "0.0.6728676", "123Test");
-
-// await getFileInfoQuery(client, "0.0.6728581");
-
-// await getFileContentTransaction(client, "0.0.6728676");
-
-// await createKeyPair();
-
 // await transferHBAR(client, 10, "0.0.194955");
 
-/* 
-Staking info for `0.0.4539024`
-- Staking info:
--- stakedAccountId: 0.0.4538944
--- stakedNodeId: null
--- declineStakingReward: false
-*/
+/* Files */
+// await createFileTransaction(client, "Test 123");
+// await updateFileTransaction(client, "0.0.6728676", "123Test");
+// await getFileInfoQuery(client, "0.0.6728581");
+// await getFileContentTransaction(client, "0.0.6728676");
