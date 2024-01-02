@@ -22,6 +22,7 @@ import {
   FileContentsQuery,
   FileInfoQuery,
 } from "@hashgraph/sdk";
+import { proto } from "@hashgraph/proto";
 import axios from "axios";
 import * as dotenv from "dotenv";
 import WHBAR from "./abi/WHBAR.json" assert { type: "json" };
@@ -45,9 +46,9 @@ const getClient = () => {
   }
 
   // Create our connection to the Hedera network
-  const client = Client.forTestnet();
+  // const client = Client.forTestnet();
   // const client = Client.forPreviewnet();
-  // const client = Client.forMainnet();
+  const client = Client.forMainnet();
 
   // Local node settings
   // const node = { "127.0.0.1:50211": new AccountId(3) };
@@ -414,6 +415,9 @@ const getFileContentTransaction = async (client, fileId) => {
   const contents = await transaction.execute(client);
 
   console.log(contents.toString());
+  // console.log(proto.NodeAddressBook.decode(contents)); // 0.0.101 / 0.0.102
+  // console.log(proto.FeeData.decode(contents)); // 0.0.111
+  // console.log(proto.ExchangeRateSet.decode(contents)); // 0.0.112
 };
 
 const getFileInfoQuery = async (client, fileId) => {
@@ -479,4 +483,4 @@ const client = getClient();
 // await createFileTransaction(client, "Test 123");
 // await updateFileTransaction(client, "0.0.6728676", "123Test");
 // await getFileInfoQuery(client, "0.0.6728581");
-// await getFileContentTransaction(client, "0.0.6728676");
+await getFileContentTransaction(client, "0.0.101");
