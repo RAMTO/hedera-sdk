@@ -33,16 +33,11 @@ const bytecode = WHBAR.bytecode;
 
 //Grab your Hedera testnet account ID and private key from your .env file
 const myAccountId = AccountId.fromString(process.env.MY_ACCOUNT_ID);
-// const myPrivateKey = PrivateKey.fromString(process.env.MY_PRIVATE_KEY);
 const myPrivateKey = PrivateKey.fromStringECDSA(process.env.MY_PRIVATE_KEY);
 // const myPrivateKey = PrivateKey.fromStringED25519(process.env.MY_PRIVATE_KEY);
 
 // Functions
 const getClient = () => {
-  // const stakeAccount = "0.0.7027";
-  const stakeAccount = AccountId.fromString("0.0.4538944");
-
-  // If we weren't able to grab it, we should throw a new error
   if (!myAccountId || !myPrivateKey) {
     throw new Error(
       "Environment variables MY_ACCOUNT_ID and MY_PRIVATE_KEY must be present"
@@ -50,10 +45,14 @@ const getClient = () => {
   }
 
   // Create our connection to the Hedera network
-  // The Hedera JS SDK makes this really easy!
-  // const client = Client.forTestnet();
-  const client = Client.forPreviewnet();
+  const client = Client.forTestnet();
+  // const client = Client.forPreviewnet();
   // const client = Client.forMainnet();
+
+  // Local node settings
+  // const node = { "127.0.0.1:50211": new AccountId(3) };
+  // const client = Client.forNetwork(node).setMirrorNetwork("127.0.0.1:5600");
+
   client.setOperator(myAccountId, myPrivateKey);
 
   return client;
@@ -481,7 +480,7 @@ const client = getClient();
 
 // await createAccount(client);
 
-// await createFileTransaction(client, "Test 123");
+await createFileTransaction(client, "Test 123");
 
 // await updateFileTransaction(client, "0.0.6728676", "123Test");
 
@@ -491,7 +490,7 @@ const client = getClient();
 
 // await createKeyPair();
 
-await transferHBAR(client, 10, "0.0.194955");
+// await transferHBAR(client, 10, "0.0.194955");
 
 /* 
 Staking info for `0.0.4539024`
