@@ -1,6 +1,7 @@
 import {
   Client,
   PrivateKey,
+  PublicKey,
   AccountId,
   ContractCreateFlow,
   ContractUpdateTransaction,
@@ -425,8 +426,45 @@ const getFileInfoQuery = async (client, fileId) => {
 
   //Sign the query with the client operator private key and submit to a Hedera network
   const getInfo = await transaction.execute(client);
+  const decodedKeys = flattenKeyList(getInfo.keys);
 
-  console.log("File info response: " + getInfo.keys);
+  console.log("File keys: " + decodedKeys);
+};
+
+const flattenKeyList = (keyList) => {
+  const protobufKey = keyList._toProtobufKey();
+
+  let keys = [];
+  const keysString = [];
+
+  formatKey(protobufKey);
+
+  function getPublicKeyFromIKey(ikey) {
+    if (ikey.ed25519) {
+      return PublicKey.fromBytesED25519(ikey.ed25519);
+    }
+    if (ikey.ECDSASecp256k1) {
+      return PublicKey.fromBytesECDSA(ikey.ECDSASecp256k1);
+    }
+  }
+
+  function formatKey(key) {
+    if (key.thresholdKey) {
+      key.thresholdKey.keys?.keys.forEach((key) => {
+        formatKey(key);
+      });
+    } else if (key.keyList) {
+      keys = key.keyList.keys.map((k) => getPublicKeyFromIKey(k));
+    } else {
+      const pk = getPublicKeyFromIKey(key);
+      if (pk && !keysString.includes(pk.toStringRaw())) {
+        keys.push(pk);
+        keysString.push(pk.toStringRaw());
+      }
+    }
+  }
+
+  return keys;
 };
 
 const words = [
@@ -482,5 +520,5 @@ const client = getClient();
 /* Files */
 // await createFileTransaction(client, "Test 123");
 // await updateFileTransaction(client, "0.0.6728676", "123Test");
-// await getFileInfoQuery(client, "0.0.6728581");
-await getFileContentTransaction(client, "0.0.101");
+await getFileInfoQuery(client, "0.0.150");
+// await getFileContentTransaction(client, "0.0.101");
