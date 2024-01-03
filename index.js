@@ -409,16 +409,56 @@ const updateFileTransaction = async (client, fileId, content) => {
   );
 };
 
+const updateRateExchangeFileTransaction = async (client, fileId) => {
+  const newRate = proto.ExchangeRateSet.create({
+    currentRate: {
+      hbarEquiv: 10,
+      expirationTime: "1963-11-25T17:31:44.000Z",
+      centEquiv: 120,
+    },
+    nextRate: {
+      hbarEquiv: 10,
+      expirationTime: "1963-11-25T17:31:44.000Z",
+      centEquiv: 111110,
+    },
+  });
+
+  const encoded = proto.ExchangeRateSet.encode(newRate).finish();
+
+  //Update the transaction
+  const transaction = await new FileUpdateTransaction()
+    .setFileId(fileId)
+    .setContents(encoded.toString())
+    .setMaxTransactionFee(new Hbar(2))
+    .freezeWith(client);
+
+  //Sign with the file private key
+  const signTx = await transaction.sign(myPrivateKey);
+
+  //Sign with the client operator private key and submit to a Hedera network
+  const submitTx = await signTx.execute(client);
+
+  //Request the receipt
+  const receipt = await submitTx.getReceipt(client);
+
+  //Get the transaction consensus status
+  const transactionStatus = receipt.status;
+
+  console.log(
+    "The transaction consensus status " + transactionStatus.toString()
+  );
+};
+
 const getFileContentTransaction = async (client, fileId) => {
   const transaction = new FileContentsQuery().setFileId(fileId);
 
   //Sign with client operator private key and submit the query to a Hedera network
   const contents = await transaction.execute(client);
 
-  console.log(contents.toString());
+  // console.log(contents.toString());
   // console.log(proto.NodeAddressBook.decode(contents)); // 0.0.101 / 0.0.102
   // console.log(proto.FeeData.decode(contents)); // 0.0.111
-  // console.log(proto.ExchangeRateSet.decode(contents)); // 0.0.112
+  console.log(proto.ExchangeRateSet.decode(contents)); // 0.0.112
 };
 
 const getFileInfoQuery = async (client, fileId) => {
@@ -535,5 +575,6 @@ const client = getClient();
 /* Files */
 // await createFileTransaction(client, "Test 123");
 // await updateFileTransaction(client, "0.0.6728676", "123Test");
-await getFileInfoQuery(client, "0.0.150");
-// await getFileContentTransaction(client, "0.0.101");
+await updateRateExchangeFileTransaction(client, "0.0.112");
+// await getFileInfoQuery(client, "0.0.111");
+// await getFileContentTransaction(client, "0.0.112");
