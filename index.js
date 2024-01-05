@@ -22,6 +22,8 @@ import {
   FileUpdateTransaction,
   FileContentsQuery,
   FileInfoQuery,
+  FreezeTransaction,
+  NetworkVersionInfoQuery,
 } from "@hashgraph/sdk";
 import { proto } from "@hashgraph/proto";
 import axios from "axios";
@@ -475,6 +477,34 @@ const getFileInfoQuery = async (client, fileId) => {
   console.log("File keys: " + keylist);
 };
 
+const freezeAndUpgradeTransaction = async (client) => {
+  const prepareUpgradeTx = await new FreezeTransaction()
+    .setFreezeType(proto.FreezeType.PrepareUpgrade)
+    .freezeWith(client)
+    .execute(client);
+
+  const prepareUpgradeReceipt = await prepareUpgradeTx.getReceipt(client);
+
+  console.log(
+    r`Upgrade prepared with transaction id: ${prepareUpgradeTx.transactionId.toString()}`,
+    prepareUpgradeReceipt.status.toString()
+  );
+
+  const freezeUpgradeTx = await new FreezeTransaction()
+    .setFreezeType(proto.FreezeType.FreezeUpgrade)
+    .freezeWith(client)
+    .execute(client);
+  const freezeUpgradeReceipt = await freezeUpgradeTx.getReceipt(client);
+
+  console.log(
+    `Freeze upgrade finished with transaction id: ${freezeUpgradeTx.transactionId.toString()}`,
+    freezeUpgradeReceipt.status.toString()
+  );
+
+  //8. Check New Version
+  console.log(await new NetworkVersionInfoQuery().execute(client));
+};
+
 function normalizePublicKey(key) {
   const protoBuffKey = key._toProtobufKey();
 
@@ -575,6 +605,9 @@ const client = getClient();
 /* Files */
 // await createFileTransaction(client, "Test 123");
 // await updateFileTransaction(client, "0.0.6728676", "123Test");
-await updateRateExchangeFileTransaction(client, "0.0.112");
+// await updateRateExchangeFileTransaction(client, "0.0.112");
 // await getFileInfoQuery(client, "0.0.111");
-// await getFileContentTransaction(client, "0.0.112");
+await getFileContentTransaction(client, "0.0.150");
+
+/* Network Upgrade */
+await freezeAndUpgradeTransaction(client);
