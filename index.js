@@ -29,6 +29,7 @@ import { proto } from "@hashgraph/proto";
 import axios from "axios";
 import * as dotenv from "dotenv";
 import WHBAR from "./abi/WHBAR.json" assert { type: "json" };
+import fs from "fs";
 
 dotenv.config();
 console.clear();
@@ -579,6 +580,40 @@ const words = [
   "trick",
 ];
 
+const extractUniqueAddressesFromContract = async (contractId) => {
+  const startDateTimestamp = 1693440000;
+  const endDateTimestamp = Date.now() / 1000;
+  const step = 24 * 60 * 60;
+  let addresses = [];
+
+  for (let i = startDateTimestamp; i < endDateTimestamp; i += step) {
+    const result = await axios(
+      `https://mainnet-public.mirrornode.hedera.com/api/v1/contracts/${contractId}/results?limit=200&order=asc&timestamp=gt:${i}`
+    );
+    const found = result.data.results.map((item) => item.from);
+    addresses = [...addresses, ...found];
+  }
+
+  const uniqueAddresses = addresses.filter(
+    (item, index) => addresses.indexOf(item) === index
+  );
+
+  const chunkSize = 100;
+  for (let i = 0; i < uniqueAddresses.length; i += chunkSize) {
+    const chunk = uniqueAddresses.slice(i, i + chunkSize);
+    console.log(`chunk ${i} - ${i + chunkSize}`, chunk);
+  }
+
+  console.log("All addresses: ", addresses.length);
+  console.log("Unique addresses: ", uniqueAddresses.length);
+
+  // Write data in 'Output.txt' .
+  // fs.writeFile("addresses.txt", JSON.stringify(uniqueAddresses),, (err) => {
+  //   // In case of a error throw err.
+  //   if (err) throw err;
+  // });
+};
+
 // Init
 const client = getClient();
 
@@ -607,7 +642,9 @@ const client = getClient();
 // await updateFileTransaction(client, "0.0.6728676", "123Test");
 // await updateRateExchangeFileTransaction(client, "0.0.112");
 // await getFileInfoQuery(client, "0.0.111");
-await getFileContentTransaction(client, "0.0.150");
+// await getFileContentTransaction(client, "0.0.150");
 
 /* Network Upgrade */
-await freezeAndUpgradeTransaction(client);
+// await freezeAndUpgradeTransaction(client);
+
+await extractUniqueAddressesFromContract("0.0.3696885");
