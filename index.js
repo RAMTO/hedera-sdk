@@ -99,6 +99,25 @@ const transferHBAR = async (client, amount, receiverId) => {
   console.log("contractUpdateRx.status", contractUpdateRx.status);
 };
 
+const unwrapHBAR = async (client, amount) => {
+  const transaction = new ContractExecuteTransaction()
+    //Set the ID of the contract
+    .setContractId("0.0.2934819")
+    //Set the contract function to call
+    .setGas(3000000)
+    .setFunction(
+      "withdraw",
+      new ContractFunctionParameters().addUint256(amount)
+    )
+    .freezeWith(client);
+
+  const contractUpdateSign = await transaction.sign(myPrivateKey);
+  const contractUpdateSubmit = await contractUpdateSign.execute(client);
+  const contractUpdateRx = await contractUpdateSubmit.getReceipt(client);
+
+  console.log("contractUpdateRx.status", contractUpdateRx.status);
+};
+
 const updateContract = async (client) => {
   const contractUpdateTx = new ContractUpdateTransaction()
     .setContractId("0.0.3928203")
@@ -647,4 +666,5 @@ const client = getClient();
 /* Network Upgrade */
 // await freezeAndUpgradeTransaction(client);
 
-await extractUniqueAddressesFromContract("0.0.3696885");
+// await extractUniqueAddressesFromContract("0.0.3696885");
+await unwrapHBAR(client, "57870000009");
