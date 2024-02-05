@@ -478,9 +478,12 @@ const getFileContentTransaction = async (client, fileId) => {
   const contents = await transaction.execute(client);
 
   // console.log(contents.toString());
-  // console.log(proto.NodeAddressBook.decode(contents)); // 0.0.101 / 0.0.102
-  // console.log(proto.FeeData.decode(contents)); // 0.0.111
-  console.log(proto.ExchangeRateSet.decode(contents)); // 0.0.112
+  console.log(proto.NodeAddressBook.decode(contents)); // 0.0.101 / 0.0.102
+  // console.log(proto.CurrentAndNextFeeSchedule.decode(contents)); // 0.0.111
+  // console.log(proto.ExchangeRateSet.decode(contents)); // 0.0.112
+  // console.log(proto.ServicesConfigurationList.decode(contents)); // 0.0.121
+  // console.log(proto.ServicesConfigurationList.decode(contents)); // 0.0.121/122
+  // console.log(proto.ThrottleDefinitions.decode(contents)); // 0.0.123
 };
 
 const getFileInfoQuery = async (client, fileId) => {
@@ -661,10 +664,10 @@ const client = getClient();
 // await updateFileTransaction(client, "0.0.6728676", "123Test");
 // await updateRateExchangeFileTransaction(client, "0.0.112");
 // await getFileInfoQuery(client, "0.0.111");
-// await getFileContentTransaction(client, "0.0.150");
+await getFileContentTransaction(client, "0.0.101");
 
 /* Network Upgrade */
 // await freezeAndUpgradeTransaction(client);
 
 // await extractUniqueAddressesFromContract("0.0.3696885");
-await unwrapHBAR(client, "57870000009");
+// await unwrapHBAR(client, "57870000009");
