@@ -24,6 +24,7 @@ import {
   FileInfoQuery,
   FreezeTransaction,
   NetworkVersionInfoQuery,
+  KeyList,
 } from "@hashgraph/sdk";
 import { proto } from "@hashgraph/proto";
 import axios from "axios";
@@ -50,9 +51,9 @@ const getClient = () => {
   }
 
   // Create our connection to the Hedera network
-  // const client = Client.forTestnet();
+  const client = Client.forTestnet();
   // const client = Client.forPreviewnet();
-  const client = Client.forMainnet();
+  // const client = Client.forMainnet();
 
   // Local node settings
   // const node = { "127.0.0.1:50211": new AccountId(3) };
@@ -350,13 +351,13 @@ const createAccount = async (client) => {
   console.log("The new account PK is: " + newAccountPrivateKey);
 };
 
-const createAccountWithKeys = async (client, pkString) => {
+const createAccountWithKeys = async (client, pkString, keys) => {
   const newAccountPrivateKey = PrivateKey.fromStringED25519(pkString);
   const newAccountPublicKey = newAccountPrivateKey.publicKey;
 
   //Create a new account with 1,000 tinybar starting balance
   const newAccount = await new AccountCreateTransaction()
-    .setKey(newAccountPublicKey)
+    .setKey(keys ? keys : newAccountPublicKey)
     .setInitialBalance(Hbar.fromTinybars(1000))
     .execute(client);
 
@@ -636,6 +637,34 @@ const extractUniqueAddressesFromContract = async (contractId) => {
   // });
 };
 
+const createKeyList = () => {
+  // Key List 1
+  const publicKey1 = PublicKey.fromString(
+    "302a300506032b6570032100609e8f8b28b26fcc48b56066753d010f699b4b4250b10c5782f16f0b1a16db1d"
+  );
+  const publicKey2 = PublicKey.fromString(
+    "a0425f5d68dea9a704972d2aba43345315f4c52a43b85a3569e06e4289a261a0"
+  );
+  const keyList1 = new KeyList([publicKey1, publicKey2], 1); // user & user
+
+  // Key List 2
+  const publicKey3 = PublicKey.fromString(
+    "302d300706052b8104000a0322000238213fca67666c94dcdb99af5766d47c162cbcf3416c158e6f0fd927ebaa9fc4"
+  );
+  const keyList2 = new KeyList([keyList1, publicKey3], 2); // multisig & user
+
+  return keyList2;
+
+  // Key List 3
+  const keyList3 = new KeyList([keyList2, publicKey1, publicKey2], 2); // multisig & user & user
+
+  // Key List 4
+  const keyList4 = new KeyList([keyList3, keyList2], 1); // multisig & multisig
+
+  const pks = flattenKeyList(keyList4);
+  console.log(pks.map((pk) => pk.toStringRaw()));
+};
+
 // Init
 const client = getClient();
 
@@ -653,10 +682,11 @@ const client = getClient();
 // await createKeyPair();
 // await recoverMnemonic(words);
 // await createAccount(client);
-// await createAccountWithKeys(
-//   client,
-//   "302e020100300506032b6570042204207657e9c21813b249baebde8c66a9d49801a7b29a5f564bf6aa993b2746fc1346"
-// );
+await createAccountWithKeys(
+  client,
+  "302e020100300506032b65700422042018edf72608d521cf3c202eef14ebeb4edf499cbeb9e19856ebbc5b57a442d78e",
+  createKeyList()
+);
 // await transferHBAR(client, 10, "0.0.194955");
 
 /* Files */
@@ -664,7 +694,7 @@ const client = getClient();
 // await updateFileTransaction(client, "0.0.6728676", "123Test");
 // await updateRateExchangeFileTransaction(client, "0.0.112");
 // await getFileInfoQuery(client, "0.0.111");
-await getFileContentTransaction(client, "0.0.101");
+// await getFileContentTransaction(client, "0.0.101");
 
 /* Network Upgrade */
 // await freezeAndUpgradeTransaction(client);
