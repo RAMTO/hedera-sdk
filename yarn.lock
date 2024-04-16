@@ -223,10 +223,10 @@
     long "^4.0.0"
     protobufjs "^7.2.5"
 
-"@hashgraph/sdk@^2.43.0":
-  version "2.43.0"
-  resolved "https://registry.yarnpkg.com/@hashgraph/sdk/-/sdk-2.43.0.tgz#860549d9fd5807488b3e00153a73a7467e3057cd"
-  integrity sha512-3MOZDL8Tm+Ciu+e402R9mSPfAUaiv8GCY+G6prUDOJzkNubRGm7gNxpeMlmHDZepc+EOkuq+kOq3QvB+2IvgWQ==
+"@hashgraph/sdk@^2.44.0":
+  version "2.44.0"
+  resolved "https://registry.yarnpkg.com/@hashgraph/sdk/-/sdk-2.44.0.tgz#02ede40fe0cb6abca8eb28c6904fa06d5d5b82b5"
+  integrity sha512-F+fASqp/8Wp27HFXi2E60qY0Zp60UJWtTonqbIT+TCFbslItbLDJR+p+2FEz3wVCWRq2gJw+1ZMi/CMWtOHYpA==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/bignumber" "^5.7.0"
