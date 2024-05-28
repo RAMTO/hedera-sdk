@@ -215,18 +215,18 @@
     tweetnacl "^1.0.3"
     utf8 "^3.0.0"
 
-"@hashgraph/proto@2.14.0-beta.5":
-  version "2.14.0-beta.5"
-  resolved "https://registry.yarnpkg.com/@hashgraph/proto/-/proto-2.14.0-beta.5.tgz#9c6991012ce85d1540b26937462560473d8dc0f7"
-  integrity sha512-UrIbLdctpD//Ua99Z4PnknbR8220nc1Pzv0nkDJ1emZE9EAi7YOOry2Dw660azQHWfVw/HhqECPdiKrTIZ2b+Q==
+"@hashgraph/proto@2.14.0-beta.6":
+  version "2.14.0-beta.6"
+  resolved "https://registry.yarnpkg.com/@hashgraph/proto/-/proto-2.14.0-beta.6.tgz#8a1e4944c687779960c501f50e60fe4476e93d73"
+  integrity sha512-LYBFkjIO1sF7gq6AgiowJdQUt+H+gErfLLrWV+jZEo6W+CBCstu8VTae8eFOTMfoz8rblcnZMPdT/dk7oT2iIQ==
   dependencies:
     long "^4.0.0"
     protobufjs "^7.2.5"
 
-"@hashgraph/sdk@^2.44.0":
-  version "2.44.0"
-  resolved "https://registry.yarnpkg.com/@hashgraph/sdk/-/sdk-2.44.0.tgz#02ede40fe0cb6abca8eb28c6904fa06d5d5b82b5"
-  integrity sha512-F+fASqp/8Wp27HFXi2E60qY0Zp60UJWtTonqbIT+TCFbslItbLDJR+p+2FEz3wVCWRq2gJw+1ZMi/CMWtOHYpA==
+"@hashgraph/sdk@^2.45.0":
+  version "2.45.0"
+  resolved "https://registry.yarnpkg.com/@hashgraph/sdk/-/sdk-2.45.0.tgz#0488e796b8069c4aeba9ef05427231687fdeeb8e"
+  integrity sha512-sIwr1TgppndYRRPklvVPF1ZdJEyfXJgz2iV0wsnymdd2kem9JAg2alLj8I4Nott9pvN72TNkiaovktX4EqOhyw==
   dependencies:
     "@ethersproject/abi" "^5.7.0"
     "@ethersproject/bignumber" "^5.7.0"
@@ -234,7 +234,7 @@
     "@ethersproject/rlp" "^5.7.0"
     "@grpc/grpc-js" "1.8.2"
     "@hashgraph/cryptography" "1.4.8-beta.5"
-    "@hashgraph/proto" "2.14.0-beta.5"
+    "@hashgraph/proto" "2.14.0-beta.6"
     axios "^1.6.4"
     bignumber.js "^9.1.1"
     bn.js "^5.1.1"
@@ -357,10 +357,10 @@ axios@^1.6.4:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
-axios@^1.6.8:
-  version "1.6.8"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.8.tgz#66d294951f5d988a00e87a0ffb955316a619ea66"
-  integrity sha512-v/ZHtJDU39mDpyBoFVkETcd/uNdxrWRrg3bKpOKzXFA6Bvqopts6ALSMU3y6ijYxbw2B+wPrIv46egTzJXCLGQ==
+axios@^1.7.2:
+  version "1.7.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.2.tgz#b625db8a7051fbea61c35a3cbb3a1daa7b9c7621"
+  integrity sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
