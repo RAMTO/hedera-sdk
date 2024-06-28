@@ -6,7 +6,7 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
-    "@hashgraph/sdk": "^2.45.0",
+    "@hashgraph/sdk": "^2.47.0",
     "axios": "^1.7.2",
     "dotenv": "^16.4.5"
   }
